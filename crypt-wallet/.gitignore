@@ -28,5 +28,5 @@
 # Ignore docker
 /docker
 
-
+/vendor
 
