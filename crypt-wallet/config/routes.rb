@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :mining_types
+  
   post 'coins', to: 'coins#create'
   get 'coins', to: 'coins#index'
   get 'coins/:id', to: 'coins#show'
