@@ -30,3 +30,5 @@
 
 /vendor
 
+.docker/entrypoint.sh
+.docker/postgres
