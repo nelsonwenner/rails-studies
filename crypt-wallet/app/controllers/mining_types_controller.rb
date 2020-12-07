@@ -3,9 +3,9 @@ class MiningTypesController < ApplicationController
   
   def index
     @mining_types = MiningType.all()
-    return render status: 200, json: @mining_types.as_json()
+    return render status: 200, json: @mining_types.as_json(include: :coins)
   end
-
+  
   def show
     return render status: 200, json: @mining_type.as_json()
   end

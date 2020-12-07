@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_07_180508) do
+ActiveRecord::Schema.define(version: 2020_04_08_154620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,10 +19,12 @@ ActiveRecord::Schema.define(version: 2020_12_07_180508) do
     t.string "description"
     t.string "acronym"
     t.string "url_image"
+    t.bigint "mining_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["mining_type_id"], name: "index_coins_on_mining_type_id"
   end
-  
+
   create_table "mining_types", force: :cascade do |t|
     t.string "name"
     t.string "acronym"
@@ -30,4 +32,5 @@ ActiveRecord::Schema.define(version: 2020_12_07_180508) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "coins", "mining_types"
 end

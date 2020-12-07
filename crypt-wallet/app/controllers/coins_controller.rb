@@ -2,21 +2,15 @@ class CoinsController < ApplicationController
   # Call method set_coin before of methods show, update, destroy
   before_action :set_coin, only: [:show, :update, :destroy]
 
-  # GET /coins
-  # GET /coins.json
   def index
     @coins = Coin.all()
-    return render status: 200, json: @coins.as_json()
+    return render status: 200, json: @coins.as_json(include: :mining_type)
   end
 
-  # GET /coins/1
-  # GET /coins/1.json
   def show
     return render status: 200, json: @coin.as_json()
   end
 
-  # POST /coins
-  # POST /coins.json
   def create
     @coin = Coin.new(coin_params)
 
@@ -27,8 +21,6 @@ class CoinsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /coins/1
-  # PATCH/PUT /coins/1.json
   def update
     if @coin.update(coin_params)
       return render status: 200, json: @coin.as_json()
@@ -37,8 +29,6 @@ class CoinsController < ApplicationController
     end
   end
 
-  # DELETE /coins/1
-  # DELETE /coins/1.json
   def destroy
     @coin.destroy()
   end
@@ -48,10 +38,10 @@ class CoinsController < ApplicationController
     def set_coin
       @coin = Coin.find(params[:id])
     end
-
+    
     # Only allow a list of trusted parameters through.
     def coin_params
-      params.require(:coin).permit(:description, :acronym, :url_image)
+      params.require(:coin).permit(:description, :acronym, :url_image, :mining_type_id)
     end
 end
 

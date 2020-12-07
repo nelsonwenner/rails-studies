@@ -4,7 +4,8 @@ class CreateCoins < ActiveRecord::Migration[5.2]
       t.string :description
       t.string :acronym
       t.string :url_image
-
+      t.references :mining_type, null: false, foreign_key: true
+      
       t.timestamps
     end
   end
