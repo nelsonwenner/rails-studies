@@ -1,15 +1,18 @@
 class CoinsController < ApplicationController
+  # Call method set_coin before of methods show, update, destroy
   before_action :set_coin, only: [:show, :update, :destroy]
 
   # GET /coins
   # GET /coins.json
   def index
-    @coins = Coin.all
+    @coins = Coin.all()
+    return render status: 200, json: @coins.as_json()
   end
 
   # GET /coins/1
   # GET /coins/1.json
   def show
+    return render status: 200, json: @coin.as_json()
   end
 
   # POST /coins
@@ -18,9 +21,9 @@ class CoinsController < ApplicationController
     @coin = Coin.new(coin_params)
 
     if @coin.save
-      render :show, status: :created, location: @coin
+      return render status: 201, json: @coin.as_json()
     else
-      render json: @coin.errors, status: :unprocessable_entity
+      return render status: 400, json: @coin.errors.to_json
     end
   end
 
@@ -28,18 +31,18 @@ class CoinsController < ApplicationController
   # PATCH/PUT /coins/1.json
   def update
     if @coin.update(coin_params)
-      render :show, status: :ok, location: @coin
+      return render status: 200, json: @coin.as_json()
     else
-      render json: @coin.errors, status: :unprocessable_entity
+      return render status: 400, json: @coin.errors.to_json
     end
   end
 
   # DELETE /coins/1
   # DELETE /coins/1.json
   def destroy
-    @coin.destroy
+    @coin.destroy()
   end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_coin

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
-  resources :coins
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  post 'coins', to: 'coins#create'
+  get 'coins', to: 'coins#index'
+  get 'coins/:id', to: 'coins#show'
+  put 'coins/:id', to: 'coins#update'
+  delete 'coins/:id', to: 'coins#destroy'
 end
