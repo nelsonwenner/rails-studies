@@ -1,14 +1,14 @@
 class CoinsController < ApplicationController
   # Call method set_coin before of methods show, update, destroy
   before_action :set_coin, only: [:show, :update, :destroy]
-
+  
   def index
     @coins = Coin.all()
     return render status: 200, json: @coins.as_json(include: :mining_type)
   end
 
   def show
-    return render status: 200, json: @coin.as_json()
+    return render status: 200, json: @coin.as_json(include: :mining_type)
   end
 
   def create
