@@ -1,0 +1,56 @@
+/* Install */
+
+sudo apt-get update
+
+sudo apt-get install libpq-dev libyaml-dev libsqlite3-dev sqlite3
+
+
+##Installing with rbenv
+
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+exec $SHELL
+
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+exec $SHELL
+
+rbenv install 2.7.1 -> Version from ruby
+rbenv global 2.7.1 -> Version from ruby
+ruby -v
+
+gem install bundler
+
+
+#Installing Rails
+
+gem install rails -v 2.5.1 -> Version from rails 
+
+rbenv rehash
+
+rails -v
+
+# install dependencies
+bundle install
+
+# create project
+rails new test-api --api
+
+# create crud / create | read | update | delete
+rails generate scaffold <Model> <Fild:type> <Fild:type> ...
+
+# Lista taks avaliable
+rails -T
+
+# commands to ORM from database
+rails db:create
+rails db:drop
+rails db:migrate
+rails db:rollback
+
+/* Alert errors */
+
+ - if you get an error when running the rails server, remove the 'tmp' folder.
+
+

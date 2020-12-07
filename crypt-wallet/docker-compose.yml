@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  rails:
+    container_name: rails-container
+    build: 
+      context: .
+    entrypoint: ./.docker/entrypoint.sh
+    volumes:
+      - ./:/home/backend
+    ports: 
+      - "3333:3333"
+    depends_on: 
+      - postgres
+    networks:
+      - app-network
+
+  postgres:
+    container_name: postgres-container
+    image: library/postgres:9.6-alpine
+    ports: 
+      - "5431:5432"
+    volumes: 
+      - ./.docker/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root@123
+    restart: always
+    networks: 
+      - app-network
+
+  adminer:
+    container_name: adminer-container
+    image: adminer
+    ports:
+      - 8080:8080
+    restart: always
+    networks: 
+      - app-network
+
+networks:
+  app-network:
+    driver: "bridge"

@@ -1,0 +1,32 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  database: database
+  host: postgres-container
+  port: 5432
+  username: root
+  password: root@123
+  pool: 5
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: database
+  host: postgres-container
+  username: root
+  password: root@123
+  pool: 5
+
+test:
+  <<: *default
+  database: test
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: database
+  host: postgres-container
+  port: 5432
+  username: root
+  password: <%= ENV['MyDatabase_Password'] %>
+  role: MyRole
