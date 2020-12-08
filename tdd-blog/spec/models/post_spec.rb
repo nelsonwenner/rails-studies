@@ -12,7 +12,7 @@ RSpec.describe Post, :type => :model do
       expect(post).to_not be_valid 
     end
   end
-
+  
   context 'Validation content post' do
     it 'Should be valid' do
       post = Post.new(title: 'One post', content: 'My content')
