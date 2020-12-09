@@ -11,5 +11,5 @@ RSpec.describe Address, :type => :model do
     it { should validate_presence_of(:city).on(:create) }
     it { should validate_presence_of(:zipcode).on(:create) }
   end
-
+  
 end
