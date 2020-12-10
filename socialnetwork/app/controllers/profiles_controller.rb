@@ -6,6 +6,10 @@ class ProfilesController < ApplicationController
     return render status: 200, json: @profiles.as_json(include: :address)
   end
   
+  def show
+    return render status: 200, json: @profile.as_json(include: :address)
+  end
+
   def create
     @profile = Profile.new(profile_params)
     
