@@ -1,6 +1,11 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: [:show, :update, :destroy]
 
+  def index
+    @profiles = Profile.all()
+    return render status: 200, json: @profiles.as_json(include: :address)
+  end
+  
   def create
     @profile = Profile.new(profile_params)
     
@@ -10,7 +15,7 @@ class ProfilesController < ApplicationController
       return render status: 400, json: @profile.errors.to_json   
     end
   end
-
+  
   private
     def set_profile
       @profile = Profile.find(params[:id])
