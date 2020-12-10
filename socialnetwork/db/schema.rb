@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_08_215412) do
+ActiveRecord::Schema.define(version: 2020_12_10_150316) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "street"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2020_12_08_215412) do
     t.index ["profile_id"], name: "index_addresses_on_profile_id"
   end
 
+  create_table "posts", force: :cascade do |t|
+    t.string "title"
+    t.string "body"
+    t.integer "profile_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["profile_id"], name: "index_posts_on_profile_id"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -31,4 +40,5 @@ ActiveRecord::Schema.define(version: 2020_12_08_215412) do
   end
 
   add_foreign_key "addresses", "profiles"
+  add_foreign_key "posts", "profiles"
 end
