@@ -12,6 +12,24 @@ RSpec.describe PostsController, :type => :controller do
         expect(assigns(:post)).to be_a(Post)
       end
     end
+    
+    context 'With invalid profile_id' do
+      it 'Does not creates a new Post' do
+        expect{
+          post :create, params: { post: valid_post, profile_id: -1 }
+        }.to change(Post, :count).by(0)
+      end
+    end
   end
-  
+
+  describe 'GET #index' do
+    let(:profile) { FactoryBot.create(:profile) }
+    
+    it 'Should have one Post' do
+      FactoryBot.create(:post, profile_id: profile.id)
+      get :index
+      expect(response).to be_successful
+    end
+  end
+
 end
