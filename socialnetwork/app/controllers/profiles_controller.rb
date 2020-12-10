@@ -3,11 +3,15 @@ class ProfilesController < ApplicationController
   
   def index
     @profiles = Profile.all()
-    return render status: 200, json: @profiles.as_json(include: :address)
+    return render status: 200, json: @profiles.as_json(
+      :include => [{:post => {:include => :comment}}, :address]
+    )
   end
 
   def show
-    return render status: 200, json: @profile.as_json(include: :address)
+    return render status: 200, json: @profiles.as_json(
+      :include => [{:post => {:include => :comment}}, :address]
+    )
   end
 
   def create
@@ -34,7 +38,7 @@ class ProfilesController < ApplicationController
   
   private
     def set_profile
-      @profile = Profile.find(params[:id])
+      @profile = Profile.find(params[:id]) or not_found
     end
     
     def profile_params
