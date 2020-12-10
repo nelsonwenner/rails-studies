@@ -50,12 +50,22 @@ RSpec.describe ProfilesController, :type => :controller do
   
   context 'PUT #update' do
     let!(:profile) { FactoryBot.create(:profile) }
-    
+
     it "Should update profile" do
       params = { email: 'wenner@mail.com' }
       put :update, params: { id: profile.id, profile: params }
       profile.reload
       expect(profile.email).to eq(params[:email])
+    end
+  end
+
+  context 'DELETE #destroy' do
+    let(:profile) { FactoryBot.create(:profile) }
+
+    it "Should delete profile" do
+      expect{
+        delete :destroy, params: { id: profile.id }
+      }.to change(Profile, :count).by(0)
     end
   end
 end
