@@ -27,7 +27,7 @@ class ProfilesController < ApplicationController
       return render status: 400, json: @profile.errors.to_json
     end
   end
-
+  
   def destroy
     @profile.destroy()
   end
