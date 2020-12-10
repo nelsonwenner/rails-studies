@@ -41,11 +41,21 @@ RSpec.describe ProfilesController, :type => :controller do
       get :show, params: { id: profile.id }
       expect(response).to be_successful
     end
-    
+
     it 'Where have id' do
       get :show, params: { id: profile.id }
       expect(assigns(:profile)).to be_a(Profile)
     end
   end
   
+  context 'PUT #update' do
+    let!(:profile) { FactoryBot.create(:profile) }
+    
+    it "Should update profile" do
+      params = { email: 'wenner@mail.com' }
+      put :update, params: { id: profile.id, profile: params }
+      profile.reload
+      expect(profile.email).to eq(params[:email])
+    end
+  end
 end
