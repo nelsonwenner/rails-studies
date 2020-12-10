@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Post, :type => :model do
   describe 'Associations' do
-    it { should belong_to(:profile) } 
+    it { should belong_to(:profile) }
+    it { should have_many(:comment) }  
   end
   
   describe 'Validations' do
