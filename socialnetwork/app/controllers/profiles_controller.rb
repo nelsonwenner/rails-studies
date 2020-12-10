@@ -19,13 +19,17 @@ class ProfilesController < ApplicationController
       return render status: 400, json: @profile.errors.to_json   
     end
   end
-  
+
   def update
     if @profile.update(profile_params)
       return render status: 200, json: @profile.as_json()
     else
       return render status: 400, json: @profile.errors.to_json
     end
+  end
+
+  def destroy
+    @profile.destroy()
   end
   
   private
