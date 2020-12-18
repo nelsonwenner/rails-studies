@@ -4,16 +4,21 @@ class ProfilesController < ApplicationController
   def index
     @profiles = Profile.all()
     return render status: 200, json: @profiles.as_json(
-      :include => [{:post => {:include => :comment}}, :address]
+      :include => [
+        :requester_invitations, 
+        :frienships_invitations,  
+        {:post => {:include => :comment}}, 
+        :address
+      ]
     )
   end
-
+  
   def show
     return render status: 200, json: @profiles.as_json(
       :include => [{:post => {:include => :comment}}, :address]
     )
   end
-
+  
   def create
     @profile = Profile.new(profile_params)
     
