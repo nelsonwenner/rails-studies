@@ -1,5 +1,5 @@
 class InvitationsController < ApplicationController
-  before_action :set_invitation, only: [:reject]
+  before_action :set_invitation, only: [:accept, :reject]
 
   def create
     @invitation = Invitation.new(invitation_params)
@@ -11,13 +11,17 @@ class InvitationsController < ApplicationController
     end
   end
 
+  def accept
+    InvitationsManager::AcceptExecuter.call(@invitation)
+  end
+  
   def reject
     InvitationsManager::RejectExecuter.call(@invitation)
   end
   
   private
     def set_invitation
-      @invitation = Invitation.find(params[:id])
+      @invitation = Invitation.find(params[:id]) or not_found
     end
 
     def invitation_params

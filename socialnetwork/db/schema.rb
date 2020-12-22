@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_18_001322) do
+ActiveRecord::Schema.define(version: 2020_12_22_172334) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "street"
@@ -29,6 +29,15 @@ ActiveRecord::Schema.define(version: 2020_12_18_001322) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer "profile_id", null: false
+    t.integer "friend_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["profile_id"], name: "index_friendships_on_profile_id"
   end
 
   create_table "invitations", force: :cascade do |t|
@@ -58,6 +67,8 @@ ActiveRecord::Schema.define(version: 2020_12_18_001322) do
 
   add_foreign_key "addresses", "profiles"
   add_foreign_key "comments", "posts"
+  add_foreign_key "friendships", "profiles"
+  add_foreign_key "friendships", "profiles", column: "friend_id"
   add_foreign_key "invitations", "profiles", column: "guest_id"
   add_foreign_key "invitations", "profiles", column: "requester_id"
   add_foreign_key "posts", "profiles"

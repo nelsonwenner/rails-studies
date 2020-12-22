@@ -5,6 +5,7 @@ class ProfilesController < ApplicationController
     @profiles = Profile.all()
     return render status: 200, json: @profiles.as_json(
       :include => [
+        :friends,
         :requester_invitations, 
         :frienships_invitations,  
         {:post => {:include => :comment}}, 
