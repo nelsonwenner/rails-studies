@@ -67,8 +67,8 @@ ActiveRecord::Schema.define(version: 2020_12_22_172334) do
 
   add_foreign_key "addresses", "profiles"
   add_foreign_key "comments", "posts"
-  add_foreign_key "friendships", "friends"
   add_foreign_key "friendships", "profiles"
+  add_foreign_key "friendships", "profiles", column: "friend_id"
   add_foreign_key "invitations", "profiles", column: "guest_id"
   add_foreign_key "invitations", "profiles", column: "requester_id"
   add_foreign_key "posts", "profiles"

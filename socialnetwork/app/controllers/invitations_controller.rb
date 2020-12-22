@@ -21,7 +21,7 @@ class InvitationsController < ApplicationController
   
   private
     def set_invitation
-      @invitation = Invitation.find(params[:id])
+      @invitation = Invitation.find(params[:id]) or not_found
     end
 
     def invitation_params

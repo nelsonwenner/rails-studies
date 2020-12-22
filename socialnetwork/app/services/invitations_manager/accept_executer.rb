@@ -7,8 +7,22 @@ module InvitationsManager
     end
     
     def call
-      puts 'CALL!!'
+      ActiveRecord::Base.transaction do
+        add(@invitation.requester, @invitation.guest)
+        add(@invitation.guest, @invitation.requester)
+        @invitation.destroy()
+      end
     end
-    
+
+    private
+      
+      def add(profile, friend)
+        @friendship = Friendship.new(
+          profile_id: profile.id, 
+          friend_id: friend.id
+        )
+        @friendship.save()
+      end
+  
   end
 end
