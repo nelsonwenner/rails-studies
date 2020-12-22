@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_12_18_001322) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
   end
-  
+
   create_table "invitations", force: :cascade do |t|
     t.integer "requester_id", null: false
     t.integer "guest_id", null: false

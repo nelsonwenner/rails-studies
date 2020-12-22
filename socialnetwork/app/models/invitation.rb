@@ -8,5 +8,4 @@ class Invitation < ApplicationRecord
     self.requester.friends.push(self.guest)
     self.guest.friends.push(self.requester)
   end
-
 end
