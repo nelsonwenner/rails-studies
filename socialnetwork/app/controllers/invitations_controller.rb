@@ -10,7 +10,7 @@ class InvitationsController < ApplicationController
       return render status: 400, json: @invitation.errors.to_json   
     end
   end
-
+  
   def reject
     InvitationsManager::RejectExecuter.call(@invitation)
   end
