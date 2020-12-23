@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe Profile, :type => :model do
   describe 'Associations' do
     it { should have_one(:address) }
-    it { should have_many(:post) }  
+    it { should have_many(:post) }
+    it { should have_many(:requester_invitations) }    
   end
   
   describe 'Validations' do
