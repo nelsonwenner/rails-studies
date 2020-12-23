@@ -13,7 +13,7 @@ RSpec.describe CommentsController, :type => :controller do
         expect(assigns(:comment)).to be_a(Comment)
       end
     end
-
+    
     context 'With invalid post_id' do
       it 'Does not creates a new Comment' do
         expect{
