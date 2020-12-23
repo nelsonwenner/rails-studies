@@ -5,6 +5,7 @@ RSpec.describe Profile, :type => :model do
     it { should have_one(:address) }
     it { should have_many(:post) }
     it { should have_many(:requester_invitations) }    
+    it { should have_many(:frienships_invitations) }    
   end
   
   describe 'Validations' do
