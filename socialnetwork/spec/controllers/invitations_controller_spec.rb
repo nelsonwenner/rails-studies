@@ -18,4 +18,22 @@ RSpec.describe InvitationsController, :type => :controller do
     end
   end
 
+  describe 'POST #accept' do
+    context 'with valid attributes'do
+      let(:profile_one) { FactoryBot.create(:profile) }
+      let(:profile_two) { FactoryBot.create(:profile) }
+
+      it 'Should accept invitation' do
+        invitation = FactoryBot.create(:invitation, 
+          requester_id: profile_one.id,
+          guest_id: profile_two.id
+        )
+        
+        expect{
+          post :accept, params: { id: invitation.id }
+        }.to change(Friendship, :count).by(2)
+      end
+    end
+  end
+
 end
