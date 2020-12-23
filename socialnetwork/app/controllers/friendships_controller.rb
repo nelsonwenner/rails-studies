@@ -2,7 +2,7 @@ class FriendshipsController < ApplicationController
 
   def undo
     friendship_params
-
+    
     @profile = Friendship.find_by(
       profile_id: params[:profile_id],
       friend_id: params[:friend_id]

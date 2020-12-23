@@ -1,5 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Friendship, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Friendship, :type => :model do
+  describe 'Associations' do
+    it { should belong_to(:profile) }
+    it { should belong_to(:friend) }
+  end
 end

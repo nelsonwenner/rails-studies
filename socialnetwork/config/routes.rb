@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       post 'accept/:id', to: 'invitations#accept'
       delete 'reject/:id', to: 'invitations#reject'
     end
-    end
+  end
   
   resources :friendships do
     collection do
