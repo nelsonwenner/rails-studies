@@ -17,7 +17,7 @@ RSpec.describe InvitationsController, :type => :controller do
       end
     end
   end
-
+  
   describe 'POST #accept' do
     context 'with valid attributes'do
       let(:profile_one) { FactoryBot.create(:profile) }
