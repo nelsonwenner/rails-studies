@@ -36,4 +36,21 @@ RSpec.describe InvitationsController, :type => :controller do
     end
   end
 
+  describe 'DELETE #reject' do
+    context 'with valid attributes'do
+      let(:profile_one) { FactoryBot.create(:profile) }
+      let(:profile_two) { FactoryBot.create(:profile) }
+
+      it 'Should reject invitation' do
+        invitation = FactoryBot.create(:invitation, 
+          requester_id: profile_one.id,
+          guest_id: profile_two.id
+        )
+
+        response = post :reject, params: { id: invitation.id }
+        expect(response.status).to equal(204)
+      end
+    end
+  end
+
 end
