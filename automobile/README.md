@@ -1,24 +1,23 @@
-# README
+## Entities
+  * Pilot
+    * name 
+  * Race
+    * date
+    * total_laps
+    * total_time
+    * best_lap
+    * time_best_lap
+    * diff
+    * gap 
+    * starting_grid
+    * average_velocity
+  * Automobile
+    * number 
+  * Tournament
+    * year
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## ToDo
+  - [ ] add models
+  - [ ] add validations
+  - [ ] add controllers
+  - [ ] add endpoints
