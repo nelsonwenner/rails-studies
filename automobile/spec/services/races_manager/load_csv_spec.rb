@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.describe RacesManager::LoadCsv do
   let(:loadcsv) { RacesManager::LoadCsv.new("test") }
 
-  describe "#format_date" do
-    it "Should be able to format the date" do
-      expect(loadcsv.format_date("race_2019_01_31.csv")).to eq("2019/01/31")
+  describe "#validate_name_file_and_extract_date" do
+    it "Should be able to validate name file and extract date" do
+      expect(
+        loadcsv.validate_name_file_and_extract_date("race_2019_01_31.csv")
+      ).to eq("2019/01/31")
     end
   end
 
