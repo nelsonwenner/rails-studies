@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2021_02_19_173104) do
 
-  create_table "automobiles", force: :cascade do |t|
+  create_table "cars", force: :cascade do |t|
     t.integer "number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -36,10 +36,10 @@ ActiveRecord::Schema.define(version: 2021_02_19_173104) do
     t.decimal "average_velocity", precision: 10, scale: 2
     t.integer "pilot_id", null: false
     t.integer "tournament_id", null: false
-    t.integer "automobile_id", null: false
+    t.integer "car_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["automobile_id"], name: "index_races_on_automobile_id"
+    t.index ["car_id"], name: "index_races_on_car_id"
     t.index ["pilot_id"], name: "index_races_on_pilot_id"
     t.index ["tournament_id"], name: "index_races_on_tournament_id"
   end
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2021_02_19_173104) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "races", "automobiles"
+  add_foreign_key "races", "cars"
   add_foreign_key "races", "pilots"
   add_foreign_key "races", "tournaments"
 end

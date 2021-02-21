@@ -12,7 +12,7 @@ class CreateRaces < ActiveRecord::Migration[6.0]
       t.decimal :average_velocity, precision: 10, scale: 2
       t.references :pilot, null: false, foreign_key: { to_table: :pilots }
       t.references :tournament, null: false, foreign_key: { to_table: :tournaments }
-      t.references :automobile, null: false, foreign_key: { to_table: :automobiles }
+      t.references :car, null: false, foreign_key: { to_table: :cars }
 
       t.timestamps
     end
