@@ -9,6 +9,12 @@ RSpec.describe RacesManager::LoadCsv do
         loadcsv.validate_name_file_and_extract_date("race_2019_01_31.csv")
       ).to eq("2019/01/31")
     end
+
+    it "Should be able to validate name file invalid" do
+      expect(
+        loadcsv.validate_name_file_and_extract_date("race_name_invalid_50_31.csv")
+      ).to eq("File name invalid. Ex: race_<year>_<month>_<day>.csv")
+    end
   end
 
   describe "#is_valid_date" do
