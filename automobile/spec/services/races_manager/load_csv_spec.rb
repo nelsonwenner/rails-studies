@@ -13,5 +13,9 @@ RSpec.describe RacesManager::LoadCsv do
     it "Should be able to validate a date valid" do
       expect(loadcsv.is_valid_date("2019/01/31")).to eq("2019-01-31T00:00:00+00:00")
     end
+
+    it "Should be able to validate a date invalid" do
+      expect(loadcsv.is_valid_date("2019/50/31")).to eq("Date invalid")
+    end
   end
 end
