@@ -1,7 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe RacesManager::LoadCsv do
-  let(:loadcsv) { RacesManager::LoadCsv.new("test") }
+  let(:csv) { Rack::Test::UploadedFile.new(Rails.root.join(
+  'spec', 'fixtures', 'files', 'race_2019_01_31.csv')) }
+  let(:loadcsv) { RacesManager::LoadCsv.new(csv) }
+
+  describe "#call" do
+    it "Should be able to load CSV, reading and create models Pilot, Car, Race" do
+      expect { 
+        loadcsv.call
+      }.to change(Tournament, :count).by(1)
+      .and change(Pilot, :count).by(14)
+      .and change(Car, :count).by(14)
+      .and change(Race, :count).by(14)
+    end
+  end
 
   describe "#validate_name_file_and_extract_date" do
     it "Should be able to validate name file and extract date" do
