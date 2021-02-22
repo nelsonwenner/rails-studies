@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2021_02_19_173104) do
   end
 
   create_table "tournaments", force: :cascade do |t|
-    t.string "year"
+    t.integer "year"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
