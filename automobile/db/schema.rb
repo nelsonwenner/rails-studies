@@ -10,22 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_19_173104) do
+ActiveRecord::Schema.define(version: 2021_02_19_173106) do
 
   create_table "cars", force: :cascade do |t|
     t.integer "number"
+    t.integer "tournament_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["tournament_id"], name: "index_cars_on_tournament_id"
   end
 
-  create_table "pilots", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "races", force: :cascade do |t|
-    t.string "date"
+  create_table "classifications", force: :cascade do |t|
     t.integer "total_laps"
     t.string "total_time"
     t.integer "best_lap"
@@ -34,13 +29,36 @@ ActiveRecord::Schema.define(version: 2021_02_19_173104) do
     t.string "gap"
     t.integer "starting_grid"
     t.decimal "average_velocity", precision: 10, scale: 2
-    t.integer "pilot_id", null: false
+    t.integer "pilot_car_race_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["pilot_car_race_id"], name: "index_classifications_on_pilot_car_race_id"
+  end
+
+  create_table "pilots", force: :cascade do |t|
+    t.string "name"
     t.integer "tournament_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tournament_id"], name: "index_pilots_on_tournament_id"
+  end
+
+  create_table "pilots_cars_races", force: :cascade do |t|
+    t.integer "race_id", null: false
+    t.integer "pilot_id", null: false
     t.integer "car_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["car_id"], name: "index_races_on_car_id"
-    t.index ["pilot_id"], name: "index_races_on_pilot_id"
+    t.index ["car_id"], name: "index_pilots_cars_races_on_car_id"
+    t.index ["pilot_id"], name: "index_pilots_cars_races_on_pilot_id"
+    t.index ["race_id"], name: "index_pilots_cars_races_on_race_id"
+  end
+
+  create_table "races", force: :cascade do |t|
+    t.string "date"
+    t.integer "tournament_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["tournament_id"], name: "index_races_on_tournament_id"
   end
 
@@ -50,7 +68,11 @@ ActiveRecord::Schema.define(version: 2021_02_19_173104) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "races", "cars"
-  add_foreign_key "races", "pilots"
+  add_foreign_key "cars", "tournaments"
+  add_foreign_key "classifications", "pilots_cars_races", column: "pilot_car_race_id"
+  add_foreign_key "pilots", "tournaments"
+  add_foreign_key "pilots_cars_races", "cars"
+  add_foreign_key "pilots_cars_races", "pilots"
+  add_foreign_key "pilots_cars_races", "races"
   add_foreign_key "races", "tournaments"
 end
