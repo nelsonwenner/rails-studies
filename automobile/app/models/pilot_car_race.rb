@@ -1,4 +1,4 @@
-class pilot_car_race < ApplicationRecord
+class PilotCarRace < ApplicationRecord
   #after_initialize :init
 
   belongs_to :pilot
