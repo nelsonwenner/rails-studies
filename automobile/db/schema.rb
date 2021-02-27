@@ -35,23 +35,23 @@ ActiveRecord::Schema.define(version: 2021_02_19_173106) do
     t.index ["pilot_car_race_id"], name: "index_classifications_on_pilot_car_race_id"
   end
 
+  create_table "pilot_car_races", force: :cascade do |t|
+    t.integer "race_id", null: false
+    t.integer "pilot_id", null: false
+    t.integer "car_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["car_id"], name: "index_pilot_car_races_on_car_id"
+    t.index ["pilot_id"], name: "index_pilot_car_races_on_pilot_id"
+    t.index ["race_id"], name: "index_pilot_car_races_on_race_id"
+  end
+
   create_table "pilots", force: :cascade do |t|
     t.string "name"
     t.integer "tournament_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["tournament_id"], name: "index_pilots_on_tournament_id"
-  end
-
-  create_table "pilots_cars_races", force: :cascade do |t|
-    t.integer "race_id", null: false
-    t.integer "pilot_id", null: false
-    t.integer "car_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["car_id"], name: "index_pilots_cars_races_on_car_id"
-    t.index ["pilot_id"], name: "index_pilots_cars_races_on_pilot_id"
-    t.index ["race_id"], name: "index_pilots_cars_races_on_race_id"
   end
 
   create_table "races", force: :cascade do |t|
@@ -69,10 +69,10 @@ ActiveRecord::Schema.define(version: 2021_02_19_173106) do
   end
 
   add_foreign_key "cars", "tournaments"
-  add_foreign_key "classifications", "pilots_cars_races", column: "pilot_car_race_id"
+  add_foreign_key "classifications", "pilot_car_races"
+  add_foreign_key "pilot_car_races", "cars"
+  add_foreign_key "pilot_car_races", "pilots"
+  add_foreign_key "pilot_car_races", "races"
   add_foreign_key "pilots", "tournaments"
-  add_foreign_key "pilots_cars_races", "cars"
-  add_foreign_key "pilots_cars_races", "pilots"
-  add_foreign_key "pilots_cars_races", "races"
   add_foreign_key "races", "tournaments"
 end
