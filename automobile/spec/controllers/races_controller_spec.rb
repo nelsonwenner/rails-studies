@@ -20,5 +20,12 @@ RSpec.describe Api::V1::RacesController, type: :controller do
       expect(eval(response.body)[:errors]).to eq("Date invalid")
       expect(response.status).to equal(422)
     end
+
+    it 'Should not be able to process CSV file name invalid' do
+      response = post :create, params: { race_file: csv_invalid_format }
+      expect(eval(response.body)[:errors]).to eq(
+      "File name invalid. Ex: race_<year>_<month>_<day>.csv")
+      expect(response.status).to equal(422)
+    end
   end
 end
