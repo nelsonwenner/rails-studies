@@ -12,16 +12,29 @@ module RacesManager
         data = validate_name_file_and_extract_date(@csv.original_filename)
         is_valid_date(data[:date])
 
-        @tournament = nil
+        tournament = Tournament.find_or_create_by!(year: data[:year])
+        race = Race.find_or_create_by!(date: data[:date], 
+          tournament_id: tournament.id
+        )
 
         ActiveRecord::Base.transaction do
           CSV.foreach(@csv.path, headers: true) do |row|
-            @tournament = Tournament.create!(year: data[:year]) if @tournament.nil?
 
-            @pilot = Pilot.create!(name: row[1])
-            @car = Car.create!(number: row[0])
-            Race.create!(
-              date: data[:date],
+            pilot = Pilot.find_or_create_by!(
+              name: row[1], tournament_id: tournament.id
+            ) unless row[1].nil?
+
+            car = Car.find_or_create_by!(
+              number: row[0], tournament_id: tournament.id
+            ) unless row[0].nil?
+
+            pilot_car_race = PilotCarRace.create!(
+              race_id: race.id,
+              pilot_id: pilot.id,
+              car_id: car.id
+            ) unless (pilot.nil? or car.nil?) 
+
+            Classification.create!(
               total_laps: row[2],
               total_time: row[3],
               best_lap: row[4],
@@ -30,10 +43,8 @@ module RacesManager
               gap: row[7],
               starting_grid: row[8],
               average_velocity: row[9],
-              pilot_id: @pilot.id,
-              tournament_id: @tournament.id,
-              car_id: @car.id
-            )
+              pilot_car_race_id: pilot_car_race.id
+            ) unless pilot_car_race.nil?
           end
         end
       rescue Exception => err
