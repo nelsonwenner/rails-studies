@@ -9,7 +9,7 @@ class CreateClassifications < ActiveRecord::Migration[6.0]
       t.string :gap
       t.integer :starting_grid
       t.decimal :average_velocity, precision: 10, scale: 2
-      t.references :pilot_car_race, null: false, foreign_key: { to_table: :pilots_cars_races }
+      t.references :pilot_car_race, null: false, foreign_key: { to_table: :pilot_car_races }
 
       t.timestamps
     end
