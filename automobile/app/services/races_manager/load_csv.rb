@@ -10,6 +10,7 @@ module RacesManager
 
     def call
         data = validate_name_file_and_extract_date(@csv.original_filename)
+        
         is_valid_date(data[:date])
 
         tournament = Tournament.find_or_create_by!(year: data[:year])
@@ -58,11 +59,11 @@ module RacesManager
       {
         date: "#{result[1]}/#{result[2]}/#{result[3]}", 
         year: result[1]
-      } rescue "File name invalid. Ex: race_<year>_<month>_<day>.csv"
+      } rescue raise Exception.new "File name invalid. Ex: race_<year>_<month>_<day>.csv"
     end
 
     def is_valid_date(date)
-      DateTime.parse(date) rescue "Date invalid"
+      DateTime.parse(date) rescue raise Exception.new "Date invalid"
     end
   end
 end
