@@ -10,7 +10,7 @@ class PilotCarRace < ApplicationRecord
   private
 
   def verify_quantity_race_cars_pilots
-    if PilotCarRace.where(race_id: self.race_id).count >= 14
+    if PilotCarRace.where(race_id: self.race_id).count > 14
       raise Exception.new "Only 14 pilots/cars are allowed per race."
     end 
   end
