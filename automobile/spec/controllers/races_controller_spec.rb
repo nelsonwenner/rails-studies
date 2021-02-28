@@ -2,17 +2,34 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::RacesController, type: :controller do
   describe "POST #create" do
-    let(:csv_valid) { Rack::Test::UploadedFile.new(Rails.root.join(
+    let(:csv_valid_one) { Rack::Test::UploadedFile.new(Rails.root.join(
     'spec', 'fixtures', 'files', 'race_2019_01_31.csv')) }
+    let(:csv_valid_two) { Rack::Test::UploadedFile.new(Rails.root.join(
+    'spec', 'fixtures', 'files', 'race_2019_03_25.csv')) }
     let(:csv_invalid_date) { Rack::Test::UploadedFile.new(Rails.root.join(
     'spec', 'fixtures', 'files', 'race_2019_02_31.csv')) }
     let(:csv_invalid_format) { Rack::Test::UploadedFile.new(Rails.root.join(
     'spec', 'fixtures', 'files', 'race_name_invalid_01_02.csv')) }
 
     it 'Should be able to process CSV and return status successfully' do
-      response = post :create, params: { race_file: csv_valid }
+      expect { 
+        response = post :create, params: { race_file: csv_valid_one }
+      }.to change(Tournament, :count).by(1)
+      .and change(Race, :count).by(1)
+      .and change(Pilot, :count).by(14)
+      .and change(Car, :count).by(14)
+      .and change(PilotCarRace, :count).by(14)
+      .and change(Classification, :count).by(14)
+
       expect(eval(response.body)[:message]).to eq("successfully")
       expect(response.status).to equal(200)
+    end
+
+    it 'Should be able to process CSV and create more a race in the tournament.' do
+      expect { 
+        post :create, params: { race_file: csv_valid_one }
+        post :create, params: { race_file: csv_valid_two }
+      }.to change(Race, :count).by(2)
     end
 
     it 'Should not be able to process CSV date invalid' do
