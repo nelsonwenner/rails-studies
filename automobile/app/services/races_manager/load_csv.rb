@@ -13,12 +13,13 @@ module RacesManager
         
         is_valid_date(data[:date])
 
-        tournament = Tournament.find_or_create_by!(year: data[:year])
-        race = Race.find_or_create_by!(date: data[:date], 
-          tournament_id: tournament.id
-        )
-
         ActiveRecord::Base.transaction do
+
+          tournament = Tournament.find_or_create_by!(year: data[:year])
+          race = Race.find_or_create_by!(date: data[:date], 
+            tournament_id: tournament.id
+          )
+
           CSV.foreach(@csv.path, headers: true) do |row|
 
             pilot = Pilot.find_or_create_by!(
