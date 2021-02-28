@@ -10,6 +10,8 @@ RSpec.describe Api::V1::RacesController, type: :controller do
     'spec', 'fixtures', 'files', 'race_2019_02_31.csv')) }
     let(:csv_invalid_format) { Rack::Test::UploadedFile.new(Rails.root.join(
     'spec', 'fixtures', 'files', 'race_name_invalid_01_02.csv')) }
+    let(:csv_invalid_quantity) { Rack::Test::UploadedFile.new(Rails.root.join(
+    'spec', 'fixtures', 'files', 'race_2019_04_01.csv')) }
 
     it 'Should be able to process CSV and return status successfully' do
       expect { 
@@ -32,13 +34,19 @@ RSpec.describe Api::V1::RacesController, type: :controller do
       }.to change(Race, :count).by(2)
     end
 
-    it 'Should not be able to process CSV date invalid' do
+    it 'Should not be able to process CSV, only 14 pilots/cars are allowed per race' do
+      response = post :create, params: { race_file: csv_invalid_quantity }
+      expect(eval(response.body)[:errors]).to eq("Only 14 pilots/cars are allowed per race.")
+      expect(response.status).to equal(422)
+    end
+
+    it 'Should not be able to process CSV, date invalid' do
       response = post :create, params: { race_file: csv_invalid_date }
       expect(eval(response.body)[:errors]).to eq("Date invalid")
       expect(response.status).to equal(422)
     end
 
-    it 'Should not be able to process CSV file name invalid' do
+    it 'Should not be able to process CSV, file name invalid' do
       response = post :create, params: { race_file: csv_invalid_format }
       expect(eval(response.body)[:errors]).to eq(
       "File name invalid. Ex: race_<year>_<month>_<day>.csv")
