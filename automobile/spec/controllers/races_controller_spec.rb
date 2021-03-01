@@ -6,6 +6,8 @@ RSpec.describe Api::V1::RacesController, type: :controller do
     'spec', 'fixtures', 'files', 'race_2019_01_31.csv')) }
     let(:csv_valid_two) { Rack::Test::UploadedFile.new(Rails.root.join(
     'spec', 'fixtures', 'files', 'race_2019_03_25.csv')) }
+    let(:csv_valid_three) { Rack::Test::UploadedFile.new(Rails.root.join(
+    'spec', 'fixtures', 'files', 'race_2019_05_01.csv')) }
     let(:csv_invalid_date) { Rack::Test::UploadedFile.new(Rails.root.join(
     'spec', 'fixtures', 'files', 'race_2019_02_31.csv')) }
     let(:csv_invalid_format) { Rack::Test::UploadedFile.new(Rails.root.join(
@@ -38,6 +40,25 @@ RSpec.describe Api::V1::RacesController, type: :controller do
       response = post :create, params: { race_file: csv_invalid_quantity }
       expect(eval(response.body)[:errors]).to eq("Only 14 pilots/cars are allowed per race.")
       expect(response.status).to equal(422)
+    end
+
+    it 'Should not be able to process CSV, a car can have different drivers in different races, and versa' do
+      post :create, params: { race_file: csv_valid_two }
+      post :create, params: { race_file: csv_valid_three }
+      
+      pilots_cars_race = PilotCarRace.all
+
+      expect([
+        pilots_cars_race[0].race.date,
+        pilots_cars_race[0].pilot.name,
+        pilots_cars_race[0].car.number
+      ]).to contain_exactly("2019/03/25", "Ana", 1000)
+      
+      expect([
+        pilots_cars_race[7].race.date,
+        pilots_cars_race[7].pilot.name,
+        pilots_cars_race[7].car.number
+      ]).to contain_exactly("2019/05/01", "Ana", 1001)
     end
 
     it 'Should not be able to process CSV, date invalid' do

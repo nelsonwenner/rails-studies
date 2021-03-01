@@ -21,8 +21,8 @@ Auto race classification API, in which the classifications are separated by race
   
   - General rules
     - [x] The car is identified by the car number;
-    - [ ] A car can have different pilots in different races;
-    - [ ] The same pilot can drive different cars in different races;
+    - [x] A car can have different pilots in different races;
+    - [x] The same pilot can drive different cars in different races;
     - [ ] A race season is defined by the year of the race date;
     - [ ] There should not be more than one car with the same number;
     - [ ] There should not be more than one pilot with the same name;
