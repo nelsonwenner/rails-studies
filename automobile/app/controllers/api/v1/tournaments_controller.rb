@@ -8,9 +8,9 @@ module Api
       end
 
       def show
-        render status: 200, json: @tournament, serializer: TournamentSerializer
+        render status: 200, json: @tournament, serializer: TournamentDetailSerializer
       end
-
+      
       private
 
       def tournaments
