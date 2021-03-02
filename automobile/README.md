@@ -23,13 +23,13 @@ Auto race classification API, in which the classifications are separated by race
     - [x] The car is identified by the car number;
     - [x] A car can have different pilots in different races;
     - [x] The same pilot can drive different cars in different races;
-    - [ ] A race season is defined by the year of the race date;
-    - [ ] There should not be more than one car with the same number;
-    - [ ] There should not be more than one pilot with the same name;
+    - [x] A race season is defined by the year of the race date;
+    - [x] There should not be more than one car with the same number;
+    - [x] There should not be more than one pilot with the same name;
     - [ ] There should be no more than one result per driver in the race;
     - [ ] Only one run per day is allowed;
-    - [ ] There will only be 14 drivers / cars per race;
-    - [ ] In a race, drivers / cars may have abandoned the race, so he may have a shorter total lap time than the first place.
+    - [x] There will only be 14 pilots / cars per race;
+    - [ ] In a race, pilots / cars may have abandoned the race, so he may have a shorter total lap time than the first place.
 
   - Scoring rules
     - [ ] +1 point for the fastest lap, ignoring the one who does not complete the race, passing the point to the next with the fastest lap and who has completed the race;
