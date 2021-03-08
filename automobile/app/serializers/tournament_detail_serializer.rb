@@ -20,6 +20,6 @@ class TournamentDetailSerializer < ActiveModel::Serializer
   end
 
   def tournament_races_url
-    "#{ api_v1_tournament_path(object.year) }/races" 
+    api_v1_tournament_races_path(object.year)
   end
 end
