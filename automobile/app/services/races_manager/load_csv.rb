@@ -2,7 +2,6 @@ require 'csv'
 
 module RacesManager
   class LoadCsv < ApplicationService
-    attr_reader :csv
 
     def initialize(csv)
       @csv = csv
@@ -66,5 +65,9 @@ module RacesManager
     def is_valid_date(date)
       DateTime.parse(date) rescue raise Exception.new "Date invalid"
     end
+
+    private
+
+    attr_reader :csv
   end
 end
