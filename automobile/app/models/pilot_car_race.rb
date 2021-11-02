@@ -6,7 +6,11 @@ class PilotCarRace < ApplicationRecord
   belongs_to :race, class_name: 'Race'
 
   has_one :classification, class_name: 'Classification'
- 
+
+  scope :total_laps, -> { joins(:classification).maximum('total_laps') }
+  scope :completed_race, -> { joins(:classification).where('classifications.total_laps = ?', total_laps) }
+  scope :not_completed_race, -> { joins(:classification).where('classifications.total_laps != ?', total_laps) }
+
   validates_uniqueness_of :race_id, :scope => [:pilot_id, :car_id], message: "There is already this pilot and car in this race. Constraint pair of unique value."
 
   private
