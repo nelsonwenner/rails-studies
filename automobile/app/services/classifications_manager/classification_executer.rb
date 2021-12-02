@@ -1,28 +1,20 @@
 module ClassificationsManager
   class ClassificationExecuter < ApplicationService
     
+    attr_reader :race
+
+    POINTS = %w(12 10 8 6 4 2).freeze
+
     def initialize(race)
       @race = race
     end
 
     def call
-      classifications = get_classifications(@race)
-
-      check_race = check_races(classifications)
-
-      add_point_best_lap(check_race[:completed_race])
-      add_point_pole_position(check_race[:completed_race])
-      add_point_first_place(check_race[:completed_race])
-
-      #check_race[:completed_race].each do |hash|
-      #  if hash["position"] != 1 && hash["points"] <= 1
-          
-      #  else
-          
-      #  end
-      #end
-
-      result = check_race[:completed_race] + check_race[:not_completed_race]
+      classifications_points = add_points(classification_format(@race.pilot_car_races.completed_race))
+      classifications_with_best_lap = add_point_best_lap(classifications_points)
+      classifications_with_poli_position = add_point_poli_position(classifications_with_best_lap)
+      result = array_merge(classifications_with_poli_position, 
+        classification_format(@race.pilot_car_races.not_completed_race))
 
       rescue Exception => err
         OpenStruct.new({success?: false, errors: err})
@@ -30,81 +22,121 @@ module ClassificationsManager
         OpenStruct.new({success?: true, payload: result})
     end
 
-    private
-
-    attr_reader :race
-
-    def get_classifications(race)
-      race.pilot_car_races.map do |item|
+    def classification_format(race)
+      race.map do |item|
         { 
-          **item.classification.attributes, car: item.car.number,
-          name: item.pilot.name, position: 0, points: 0
-        }
+          position: 0, points: 0,
+          automobile: item.car.number,
+          name: item.pilot.name,
+          **item.classification.attributes
+        }.symbolize_keys
       end
     end
 
-    def add_point_first_place(classifications_array)
-      array_items = classifications_array.find_all { |hash| hash[:points] >= 1 }
+    def array_merge(array_one, array_two)
+      last_position = array_one.max_by { |obj| obj[:position] }
 
-      if array_items.length == 2
-        pilot_one = array_items[0]
-        pilot_two = array_items[1] 
-
-        if pilot_one[:time_best_lap] == pilot_two[:time_best_lap]
-          # Average speed
-          pilot = array_items.max_by { |hash| hash["average_velocity"] }
-          classifications_array[classifications_array.index(pilot)][:position] = 1
-          classifications_array[classifications_array.index(pilot)][:points] += 12
-        else
-          # Best lap time
-          pilot = array_items.min_by { |hash| 
-          calc_time_best_lap(hash["time_best_lap"]) }
-          classifications_array[classifications_array.index(pilot)][:position] = 1
-          classifications_array[classifications_array.index(pilot)][:points] += 12
-        end
-      else
-        # first place
-        classifications_array[classifications_array.index(array_items[0])][:position] = 1
-        classifications_array[classifications_array.index(array_items[0])][:points] += 12
-      end
-    end
-
-    def add_point_best_lap(classifications_array)
-      best_lap = classifications_array.min_by { |hash| 
-        calc_time_best_lap(hash["time_best_lap"])
+      array_one_formated = array_one.map { |obj| 
+        PilotCarRaceSerializer.new(obj) 
       }
-      classifications_array[classifications_array.index(
-        best_lap
-      )][:points] += 1 
+
+      array_two_formated = array_two.map.with_index { |obj, index|
+        PilotCarRaceSerializer.new({**obj,
+          position: last_position[:position] + (index+1),
+          points: 0
+        })
+      }
+
+      array_one_formated + array_two_formated
+    end
+
+    def add_point_best_lap(classifications)
+      best_lap = classifications.min_by { |obj|
+        calc_time_best_lap(obj[:time_best_lap])
+      }
+
+      classifications[
+        classifications.index(best_lap)
+      ] = { 
+        **best_lap,
+        points: best_lap[:points] + 1,
+        position: best_lap[:position]
+      }
+      
+      return classifications
+    end
+
+    def add_point_poli_position(classifications)
+      poli = classifications.min_by { |obj|
+        obj[:starting_grid]
+      }
+
+      classifications[
+        classifications.index(poli)
+      ] = {
+        **poli,
+        points: poli[:points] + 1,
+        position: poli[:position]
+      }
+      
+      return classifications
+    end
+
+    def add_points(pilot_car_races)
+      classifications_clone = pilot_car_races.map(&:clone)
+      
+      pilot_car_races.map.with_index do |hash, index|
+        pilot = classifications_clone.min_by { |pilot|
+          calc_time_best_lap(pilot[:total_time]) 
+        }
+
+        duplicates = classifications_clone.find_all { |obj| 
+          obj[:total_time] == pilot[:total_time]
+        }
+
+        if duplicates.size > 1
+          pilot_best_lap = duplicates.min_by { |pilot|
+            calc_time_best_lap(pilot[:time_best_lap]) 
+          }
+          
+          duplicate_pilot_best_lap = duplicates.find_all { |obj| 
+            obj[:time_best_lap] == pilot_best_lap[:time_best_lap]
+          }
+
+          if duplicate_pilot_best_lap.size > 1
+            pilot_average_velocity = duplicate_pilot_best_lap.max_by { |obj| 
+              obj[:average_velocity].to_f
+            }
+            
+            pilot = pilot_average_velocity
+          else
+            pilot = pilot_best_lap
+          end
+        end
+
+        if index <= (POINTS.size - 1)
+          current_pilot = classifications_clone.delete(pilot)
+        
+          { 
+            **current_pilot,
+            points: POINTS[index].to_i,
+            position: index+1
+          }
+        else
+          current_pilot = classifications_clone.delete(pilot)
+          
+          { 
+            **current_pilot,
+            points: 1,
+            position: index+1
+          }
+        end
+      end
     end
 
     def calc_time_best_lap(time)
       current_time = time.split(":")
-      return current_time[0].to_i + current_time[1].to_f
-    end
-
-    def add_point_pole_position(classifications_array)
-      pole_position = classifications_array.min_by { |hash| 
-        hash["starting_grid"]
-      }
-      classifications_array[classifications_array.index(
-        pole_position
-      )][:points] += 1 
-    end
-
-    def check_races(classifications_array)
-      new_classifications = {"completed_race": [], "not_completed_race": []}
-      max_laps = classifications_array.max_by { |hash| 
-        hash["total_laps"] 
-      }["total_laps"]
-      classifications_array.each { |hash|
-        if hash["total_laps"] < max_laps 
-          new_classifications[:not_completed_race] << hash
-        else
-          new_classifications[:completed_race] << hash
-        end 
-      }
-      return new_classifications
+      current_time.sum(&:to_f)
     end
   end
 end

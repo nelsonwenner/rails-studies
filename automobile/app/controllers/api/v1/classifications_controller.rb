@@ -7,7 +7,7 @@ module Api
         result = ClassificationsManager::ClassificationExecuter.call(@race)
 
         if result && result.success?
-          render status: 200, json: result.payload
+          render status: 200, json: result.payload.to_json
         else
           render status: 422, json: errors(result)
         end
